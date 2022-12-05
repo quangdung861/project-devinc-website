@@ -19,8 +19,16 @@ function* getProductListSaga(action) {
           q: params.keyword,
         }),
         _embed: ["images", "reviews"],
-        _sort: "id",
-        _order: "desc",
+        ...(params.priceFilter
+          ? {
+              _sort: "price",
+            }
+          : { _sort: "id" }),
+        ...(params.priceFilter
+          ? {
+              _order: params.priceFilter,
+            }
+          : { _order: "desc" }),
       },
     });
     yield put({
@@ -87,7 +95,7 @@ function* clearProductListSaga(action) {
 
 export default function* productSaga() {
   yield debounce(
-    200,
+    100,
     REQUEST(PRODUCT_ACTION.GET_PRODUCT_LIST),
     getProductListSaga
   );

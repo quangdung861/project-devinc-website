@@ -33,6 +33,8 @@ const ProductListPage = () => {
   const dispatch = useDispatch();
   const { state } = useLocation();
 
+  const [priceFilter, setPriceFilter] = useState("");
+
   const { productList } = useSelector((state) => state.productReducer);
 
   const { categoryList } = useSelector((state) => state.categoryReducer);
@@ -40,6 +42,17 @@ const ProductListPage = () => {
   const newDate = moment(1667820910668).fromNow();
 
   ///
+
+  const handlePriceFilter = (key, value) => {
+    console.log("🚀 ~ file: index.jsx:47 ~ handlePriceFilter ~ key, value", key, value)
+    if (priceFilter === value) {
+      setPriceFilter("");
+      handleFilter(key, "");
+    } else {
+      setPriceFilter(value);
+      handleFilter(key, value);
+    }
+  };
 
   useEffect(() => {
     if (state?.categoryId?.length) {
@@ -364,16 +377,37 @@ const ProductListPage = () => {
         </Col>
         <Col md={19} sm={24} xs={24}>
           <S.MainContent>
-            <Row gutter={[16, 16]} style={{ marginBottom: "10px" }}>
-              <Col md={20} sm={20} xs={20}>
+            <Row gutter={8} style={{ marginBottom: "10px" }}>
+              <Col lg={16} md={14} sm={12} xs={10}>
                 <Input
                   onChange={(e) => handleFilter("keyword", e.target.value)}
                   placeholder="Tìm kiếm"
                   value={filterParams.keyword}
                 />
               </Col>
-              <Col md={4} sm={4} xs={4}>
-                <Select style={{ width: "100%" }} />
+              <Col lg={4} md={5} sm={6} xs={7} >
+                <Button
+                  style={{
+                    width: "100%",
+                    borderRadius: "4px",
+                    ...(priceFilter === "desc" && { color: "#999c03", border: "1px solid #999c03" }),
+                  }}
+                  onClick={() => handlePriceFilter("priceFilter", "desc")}
+                >
+                  Giá giảm dần
+                </Button>
+              </Col>
+              <Col lg={4} md={5} sm={6} xs={7}>
+                <Button
+                  style={{
+                    width: "100%",
+                    borderRadius: "4px",
+                    ...(priceFilter === "asc" && { color: "#999c03", border: "1px solid #999c03"}),
+                  }}
+                  onClick={() => handlePriceFilter("priceFilter", "asc")}
+                >
+                  Giá tăng dần
+                </Button>
               </Col>
             </Row>
             <Space style={{ marginBottom: "10px" }}>
