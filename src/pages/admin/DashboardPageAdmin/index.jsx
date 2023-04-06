@@ -10,7 +10,7 @@ const DashboardPageAdmin = () => {
       <S.MainContent>
         <div style={{width: "100%"}}>
 
-        <img style={{width: "100%"}} src="https://www.klipfolio.com/gatsby-files/static/1d0d4b2e191a15d080c3857830cdedea/9e562/dashboard-examples-hero.png" alt="" />
+        <img style={{width: "100%"}} src="https://vtcc.vn/wp-content/uploads/2023/02/dashboard-examples-hero.png" alt="" />
         </div>
       </S.MainContent>
     </S.MainContainer>
