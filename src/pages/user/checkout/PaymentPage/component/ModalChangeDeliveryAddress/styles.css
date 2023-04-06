@@ -1,0 +1,36 @@
+.delivery-address-list {
+}
+
+.delivery-address-list .delivery-address-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.delivery-address-list .delivery-address-item .delivery-address-detail {
+  width: 300px;
+  color: #818181;
+}
+
+.delivery-address-list .delivery-address-item .delivery-address-action {
+  color: #1890ff;
+  align-items: start;
+}
+
+.delivery-address-list
+  .delivery-address-item
+  .delivery-address-action
+  .choose-delivery-address,
+.choose-delivery-address-default {
+  cursor: pointer;
+}
+
+
+  .division-line {
+  border-right: 1px solid #ccc;
+  height: 20px;
+}
+
+
+.delivery-address-list .delivery-address-item .delivery-address-action:hover {
+  color: #40a9ff;
+}

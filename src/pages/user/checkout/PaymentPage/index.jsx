@@ -41,9 +41,12 @@ import {
   //
   clearVoucherSelectedAction,
   clearVoucherShipSelectedAction,
+  getDetailLocationAction,
 } from "../../../../redux/user/actions";
 import { SHIP_FEE } from "../CartPage/constant/shipFee";
 import { BANKING_LIST } from "./constant/bankingList";
+
+import ModalChangeDeliveryAddress from "./component/ModalChangeDeliveryAddress";
 
 import voucher from "../../../../assets/images/voucher.png";
 import voucherDisable from "../../../../assets/images/voucherDisable.png";
@@ -77,13 +80,13 @@ const PaymentPage = () => {
   const { cartList } = useSelector((state) => state.cartReducer);
   const { userInfo } = useSelector((state) => state.userReducer);
   const { orderData } = useSelector((state) => state.orderReducer);
-  console.log(
-    "🚀 ~ file: index.jsx ~ line 80 ~ PaymentPage ~ orderList",
-    orderData.loading
-  );
+  const { locationDetail } = useSelector((state) => state.locationReducer);
+  // console.log("🚀 ~ file: index.jsx:82 ~ PaymentPage ~ locationDetail:", locationDetail)
+
   const { cityList, districtList, wardList } = useSelector(
     (state) => state.locationReducer
   );
+
   const { voucherList, voucherSelected, voucherShipList, voucherShipSelected } =
     useSelector((state) => state.voucherReducer);
 
@@ -95,19 +98,26 @@ const PaymentPage = () => {
   let totalPrice = 0; // tổng giá
 
   const initialValues = {
-    fullName: userInfo.data.fullName || "",
-    email: userInfo.data.email || "",
-    phoneNumber: userInfo.data.phoneNumber || "",
-    address: "",
-    cityCode: undefined,
-    districtCode: undefined,
-    wardCode: undefined,
+    fullName: locationDetail.data[0]?.fullName || "",
+    email: locationDetail.data[0]?.email || "",
+    phoneNumber: locationDetail.data[0]?.phoneNumber || "",
+    address: locationDetail.data[0]?.address,
+    cityCode: locationDetail.data[0]?.cityId,
+    districtCode: locationDetail.data[0]?.districtId,
+    wardCode: locationDetail.data[0]?.wardId,
     method: "cod",
   };
 
   useEffect(() => {
     dispatch(getCityListAction());
-  }, []);
+    dispatch(getDetailLocationAction());
+    dispatch(
+      getDistrictListAction({ cityCode: locationDetail.data[0]?.cityId })
+    );
+    dispatch(
+      getWardListAction({ districtCode: locationDetail.data[0]?.districtId })
+    );
+  }, [locationDetail.data[0]?.id]);
 
   useEffect(() => {
     if (userInfo.data.id) {
@@ -615,6 +625,9 @@ const PaymentPage = () => {
                 fontWeight: 500,
               }}
             >
+              <div className="change-delivery-address">
+                <ModalChangeDeliveryAddress locationDetail={locationDetail} />
+              </div>
               <Form.Item
                 label="Họ tên"
                 name="fullName"

@@ -48,12 +48,13 @@ function* getLocationDetailSaga(action) {
   }
 }
 
-function* getDistrictListSga(action) {
+function* getDistrictListSaga(action) {
   try {
     const { cityCode } = action.payload;
     const result = yield axios.get(
       `http://localhost:4000/districts?parentcode=${cityCode}`
     );
+    console.log("🚀 ~ file: location.saga.js:57 ~ function*getDistrictListSaga ~ result:", result)
 
     yield put({
       type: SUCCESS(LOCATION_ACTION.GET_DISTRICT_LIST),
@@ -194,7 +195,7 @@ export default function* locationSaga() {
   );
   yield takeEvery(
     REQUEST(LOCATION_ACTION.GET_DISTRICT_LIST),
-    getDistrictListSga
+    getDistrictListSaga
   );
   yield takeEvery(REQUEST(LOCATION_ACTION.GET_WARD_LIST), getWardListSaga);
   yield takeEvery(

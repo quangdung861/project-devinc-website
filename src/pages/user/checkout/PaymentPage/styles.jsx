@@ -7,6 +7,18 @@ export const Wrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 
+  .change-delivery-address {
+    position: absolute;
+    right: 0px;
+    margin-right: 20px;
+    color: #1890ff;
+    font-weight: normal;
+    cursor: pointer;
+    &:hover {
+      color: #40a9ff;
+    }
+  }
+
   & .row-title {
     font-size: 17px;
     font-weight: 500;
