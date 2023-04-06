@@ -15,13 +15,16 @@ $ yarn install
 $ yarn start
 $ yarn run server
 ```
+
+```
 Login information - Json Server Auth
 * Admin
-$ Id: thaonguyen861@gmail.com
-$ Pass: 123456
+Id: thaonguyen861@gmail.com
+Pass: 123456
 * User
-$ Id: quangdung861@gmail.com 
-$ Pass: 123456
+Id: quangdung861@gmail.com 
+Pass: 123456
+```
 
 ### Guide for this  repository is here:
 
