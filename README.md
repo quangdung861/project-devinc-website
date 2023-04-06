@@ -16,12 +16,13 @@ $ yarn start
 $ yarn run server
 ```
 
+Login information - Json Server Auth.
+
 ```
-Login information - Json Server Auth
-* Admin
+* **Admin
 Id: thaonguyen861@gmail.com
 Pass: 123456
-* User
+* **User
 Id: quangdung861@gmail.com 
 Pass: 123456
 ```
