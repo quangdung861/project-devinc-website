@@ -29,24 +29,24 @@ function* getCityListSaga(action) {
   }
 }
 
-function* getLocationDetailSaga(action) {
-  try {
-    const result = yield axios.get(`http://localhost:4000/locations`);
-    yield put({
-      type: SUCCESS(LOCATION_ACTION.GET_DETAIL_LOCATION),
-      payload: {
-        data: result.data,
-      },
-    });
-  } catch (error) {
-    yield put({
-      type: FAIL(LOCATION_ACTION.GET_DETAIL_LOCATION),
-      payload: {
-        errors: error,
-      },
-    });
-  }
-}
+// function* getLocationDetailSaga(action) {
+//   try {
+//     const result = yield axios.get(`http://localhost:4000/locations`);
+//     yield put({
+//       type: SUCCESS(LOCATION_ACTION.GET_DETAIL_LOCATION),
+//       payload: {
+//         data: result.data,
+//       },
+//     });
+//   } catch (error) {
+//     yield put({
+//       type: FAIL(LOCATION_ACTION.GET_DETAIL_LOCATION),
+//       payload: {
+//         errors: error,
+//       },
+//     });
+//   }
+// }
 
 function* getDistrictListSaga(action) {
   try {
@@ -54,7 +54,6 @@ function* getDistrictListSaga(action) {
     const result = yield axios.get(
       `http://localhost:4000/districts?parentcode=${cityCode}`
     );
-    console.log("🚀 ~ file: location.saga.js:57 ~ function*getDistrictListSaga ~ result:", result)
 
     yield put({
       type: SUCCESS(LOCATION_ACTION.GET_DISTRICT_LIST),
@@ -131,12 +130,15 @@ function* createLocationSaga(action) {
 function* deleteLocationSaga(action) {
   try {
     const { locationId, userId } = action.payload;
-    const result = yield axios.delete(`http://localhost:4000/locations/${locationId}`);
+    console.log(
+      "🚀 ~ file: location.saga.js:133 ~ function*deleteLocationSaga ~ locationId:",
+      locationId
+    );
+    yield axios.delete(
+      `http://localhost:4000/locations/${locationId}`
+    );
     yield put({
       type: SUCCESS(LOCATION_ACTION.DELETE_LOCATION_ITEM),
-      payload: {
-        data: result.data
-      }
     });
     yield put({
       type: REQUEST(USER_ACTION.GET_USER_INFO),
@@ -187,12 +189,54 @@ function* updateLocationSaga(action) {
   }
 }
 
+function* setDefaultLocationSaga(action) {
+  try {
+    const { locationId, userId } = action.payload;
+    const result = yield axios.get(
+      `http://localhost:4000/locations?userId=${userId}`
+    );
+    for (let i = 0; i < result.data.length; i++) {
+      if (result.data[i].id === locationId) {
+        yield axios.patch(
+          `http://localhost:4000/locations/${result.data[i].id}`,
+          {
+            default: 1,
+          }
+        );
+      } else {
+        yield axios.patch(
+          `http://localhost:4000/locations/${result.data[i].id}`,
+          {
+            default: 0,
+          }
+        );
+      }
+    }
+    yield put({
+      type: SUCCESS(LOCATION_ACTION.SET_DEFAULT_LOCATION),
+    });
+    yield put({
+      type: REQUEST(USER_ACTION.GET_USER_INFO),
+      payload: {
+        id: userId,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: FAIL(LOCATION_ACTION.SET_DEFAULT_LOCATION),
+      payload: {
+        errors: error,
+      },
+    });
+  }
+}
+
 export default function* locationSaga() {
   yield takeEvery(REQUEST(LOCATION_ACTION.GET_CITY_LIST), getCityListSaga);
-  yield takeEvery(
-    REQUEST(LOCATION_ACTION.GET_DETAIL_LOCATION),
-    getLocationDetailSaga
-  );
+  // yield takeEvery(
+  //   REQUEST(LOCATION_ACTION.GET_DETAIL_LOCATION),
+  //   getLocationDetailSaga
+  // );
   yield takeEvery(
     REQUEST(LOCATION_ACTION.GET_DISTRICT_LIST),
     getDistrictListSaga
@@ -209,5 +253,9 @@ export default function* locationSaga() {
   yield takeEvery(
     REQUEST(LOCATION_ACTION.UPDATE_LOCATION_ITEM),
     updateLocationSaga
+  );
+  yield takeEvery(
+    REQUEST(LOCATION_ACTION.SET_DEFAULT_LOCATION),
+    setDefaultLocationSaga
   );
 }

@@ -24,6 +24,7 @@ import {
   createLocationAction,
   deleteLocationAction,
   updateLocationAction,
+  setDefaultLocationAction,
 } from "../../../../redux/user/actions";
 
 import * as S from "./styles";
@@ -36,9 +37,13 @@ const AddressPage = () => {
   const [updateLocationForm] = Form.useForm();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.userReducer);
-  const { cityList, districtList, wardList, createLocationData } = useSelector(
-    (state) => state.locationReducer
-  );
+  const {
+    cityList,
+    districtList,
+    wardList,
+    createLocationData,
+    setDefaultLocationData,
+  } = useSelector((state) => state.locationReducer);
 
   const [locationId, setLocationId] = useState("");
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -66,9 +71,13 @@ const AddressPage = () => {
   };
 
   const handleDeleteLocationItem = (locationId) => {
-    console.log("🚀 ~ file: index.jsx ~ line 69 ~ handleDeleteLocationItem ~ locationId", locationId)
     if (locationId) {
-      dispatch(deleteLocationAction({ locationId: locationId, userId: userInfo.data.id }));
+      dispatch(
+        deleteLocationAction({
+          locationId: locationId,
+          userId: userInfo.data.id,
+        })
+      );
     }
   };
 
@@ -118,6 +127,7 @@ const AddressPage = () => {
         districtName: districtData.name,
         wardName: wardData.name,
         userId: userInfo.data.id,
+        default: 0,
         callback: {
           resetModalCreateLocation: createLocationForm.resetFields(),
           cancelModalCreateLocation: setIsModalOpen(false),
@@ -129,6 +139,12 @@ const AddressPage = () => {
   useEffect(() => {
     dispatch(getCityListAction());
   }, []);
+
+  const handleChooseDefaultLocation = async (locationId) => {
+    dispatch(
+      setDefaultLocationAction({ locationId, userId: userInfo.data.id })
+    );
+  };
 
   const renderCityList = useMemo(() => {
     return cityList.data?.map((item, index) => {
@@ -165,86 +181,94 @@ const AddressPage = () => {
       if (userInfo.data?.locations[0]?.address) {
         return userInfo.data.locations.map((item) => {
           return (
-            <Row
-              span={24}
-              key={item.id}
-              style={{ paddingBottom: 18, color: "#7e7d7d" }}
-            >
-              <Col span={18}>
-                <Row>
-                  <div style={{ fontSize: 16, color: "#000" }}>
-                    {item.fullName}
-                  </div>
-                  <div
-                    style={{
-                      borderLeft: "1px solid #ccc",
-                      margin: "0px 8px",
-                    }}
-                  ></div>
-                  <div>{item.phoneNumber}</div>
-                </Row>
-                <Row>{item.address}</Row>
-                <Row>
-                  {item.wardName}, {item.districtName}, {item.cityName}
-                </Row>
-                <Row>
-                  <Tag
-                    style={{
-                      color: "rgb(238, 77, 45)",
-                      borderColor: "rgb(238, 77, 45)",
-                      backgroundColor: "rgb(238, 77, 45, 0)",
-                    }}
-                  >
-                    Mặc định
-                  </Tag>
-                  <Tag
-                    style={{
-                      backgroundColor: "rgb(238, 77, 45, 0)",
-                    }}
-                  >
-                    Địa chỉ lấy hàng
-                  </Tag>
-                  <Tag
-                    style={{
-                      backgroundColor: "rgb(238, 77, 45, 0)",
-                    }}
-                  >
-                    Địa chỉ trả hàng
-                  </Tag>
-                </Row>
-              </Col>
-
-              <Col span={6}>
-                <Row
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginBottom: "8px",
-                  }}
-                >
-                  <Space>
+            <Skeleton key={item.id} active loading={setDefaultLocationAction.loading}>
+              <Row span={24} style={{ paddingBottom: 18, color: "#7e7d7d" }}>
+                <Col span={18}>
+                  <Row>
+                    <div style={{ fontSize: 16, color: "#000" }}>
+                      {item.fullName}
+                    </div>
                     <div
-                      style={{ color: "rgb(0, 136, 255)", cursor: "pointer" }}
-                      onClick={() => {
-                        setLocationId(item.id);
-                        showUpdateModal();
+                      style={{
+                        borderLeft: "1px solid #ccc",
+                        margin: "0px 8px",
+                      }}
+                    ></div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {item.phoneNumber}
+                    </div>
+                  </Row>
+                  <Row>{item.address}</Row>
+                  <Row>
+                    {item.wardName}, {item.districtName}, {item.cityName}
+                  </Row>
+                  <Row>
+                    {item.default === 1 && (
+                      <Tag
+                        style={{
+                          color: "rgb(238, 77, 45)",
+                          borderColor: "rgb(238, 77, 45)",
+                          backgroundColor: "rgb(238, 77, 45, 0)",
+                        }}
+                      >
+                        Mặc định
+                      </Tag>
+                    )}
+                    <Tag
+                      style={{
+                        backgroundColor: "rgb(238, 77, 45, 0)",
                       }}
                     >
-                      Cập nhật
-                    </div>
-                    <div
-                      style={{ color: "rgb(0, 136, 255)", cursor: "pointer" }}
-                      onClick={() => handleDeleteLocationItem(item.id)}
+                      Địa chỉ lấy hàng
+                    </Tag>
+                    <Tag
+                      style={{
+                        backgroundColor: "rgb(238, 77, 45, 0)",
+                      }}
                     >
-                      Xóa
-                    </div>
-                  </Space>
-                </Row>
-                <Row style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button disabled>Thiết lập mặc định</Button>
-                </Row>
-              </Col>
-            </Row>
+                      Địa chỉ trả hàng
+                    </Tag>
+                  </Row>
+                </Col>
+
+                <Col span={6}>
+                  <Row
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <Space>
+                      <div
+                        style={{ color: "rgb(0, 136, 255)", cursor: "pointer" }}
+                        onClick={() => {
+                          setLocationId(item.id);
+                          showUpdateModal();
+                        }}
+                      >
+                        Cập nhật
+                      </div>
+                      <div
+                        style={{ color: "rgb(0, 136, 255)", cursor: "pointer" }}
+                        onClick={() => handleDeleteLocationItem(item.id)}
+                      >
+                        Xóa
+                      </div>
+                    </Space>
+                  </Row>
+                  <Row style={{ display: "flex", justifyContent: "flex-end" }}>
+                    {item.default === 0 && (
+                      <Button
+                        onClick={() => handleChooseDefaultLocation(item.id)}
+                      >
+                        Thiết lập mặc định
+                      </Button>
+                    )}
+                  </Row>
+                </Col>
+              </Row>
+            </Skeleton>
           );
         });
       }
@@ -253,7 +277,7 @@ const AddressPage = () => {
 
   return (
     <S.Wrapper>
-      <Row  gutter={[16, 16]}>
+      <Row gutter={[16, 16]}>
         <Col md={4} sm={24} xs={24} className="sidebar">
           <Sidebar />
         </Col>

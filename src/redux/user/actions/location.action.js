@@ -15,9 +15,9 @@ export const clearLocationAction = createAction(
   REQUEST(LOCATION_ACTION.CLEAR_LOCATION)
 );
 
-export const getDetailLocationAction = createAction(
-  REQUEST(LOCATION_ACTION.GET_DETAIL_LOCATION)
-);
+// export const getDetailLocationAction = createAction(
+//   REQUEST(LOCATION_ACTION.GET_DETAIL_LOCATION)
+// );
 
 export const createLocationAction = createAction(
   REQUEST(LOCATION_ACTION.CREATE_LOCATION_ITEM)
@@ -28,3 +28,8 @@ export const deleteLocationAction = createAction(
 export const updateLocationAction = createAction(
   REQUEST(LOCATION_ACTION.UPDATE_LOCATION_ITEM)
 );
+
+export const setDefaultLocationAction = createAction(
+  REQUEST(LOCATION_ACTION.SET_DEFAULT_LOCATION)
+);
+

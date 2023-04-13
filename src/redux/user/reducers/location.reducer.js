@@ -38,6 +38,11 @@ const initialState = {
     loading: false,
     errors: null,
   },
+  setDefaultLocationData: {
+    data: [],
+    loading: false,
+    errors: null,
+  },
 };
 
 const locationReducer = createReducer(initialState, {
@@ -245,13 +250,13 @@ const locationReducer = createReducer(initialState, {
   },
 
   [SUCCESS(LOCATION_ACTION.DELETE_LOCATION_ITEM)]: (state, action) => {
-    const { data } = action.payload;
+    // const { data } = action.payload;
     return {
       ...state,
       deleteLocationData: {
         ...state.deleteLocationData,
         loading: false,
-        data,
+        // data,
       },
     };
   },
@@ -296,6 +301,39 @@ const locationReducer = createReducer(initialState, {
       ...state,
       updateLocationData: {
         ...state.updateLocationData,
+        loading: false,
+        errors,
+      },
+    };
+  },
+  //
+
+  [REQUEST(LOCATION_ACTION.SET_DEFAULT_LOCATION)]: (state, action) => {
+    return {
+      ...state,
+      setDefaultLocationData: {
+        ...state.setDefaultLocationData,
+        loading: true,
+      },
+    };
+  },
+
+  [SUCCESS(LOCATION_ACTION.SET_DEFAULT_LOCATION)]: (state, action) => {
+    return {
+      ...state,
+      setDefaultLocationData: {
+        ...state.setDefaultLocationData,
+        loading: false,
+      },
+    };
+  },
+
+  [FAIL(LOCATION_ACTION.UPDATE_LOCATION_ITEM)]: (state, action) => {
+    const { errors } = action.payload;
+    return {
+      ...state,
+      setDefaultLocationData: {
+        ...state.setDefaultLocationData,
         loading: false,
         errors,
       },

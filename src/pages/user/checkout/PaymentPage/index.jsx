@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 
 import { generatePath, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,7 +41,6 @@ import {
   //
   clearVoucherSelectedAction,
   clearVoucherShipSelectedAction,
-  getDetailLocationAction,
 } from "../../../../redux/user/actions";
 import { SHIP_FEE } from "../CartPage/constant/shipFee";
 import { BANKING_LIST } from "./constant/bankingList";
@@ -97,27 +96,39 @@ const PaymentPage = () => {
     : SHIP_FEE; // Giảm giá vận chuyển
   let totalPrice = 0; // tổng giá
 
-  const initialValues = {
-    fullName: locationDetail.data[0]?.fullName || "",
-    email: locationDetail.data[0]?.email || "",
-    phoneNumber: locationDetail.data[0]?.phoneNumber || "",
-    address: locationDetail.data[0]?.address,
-    cityCode: locationDetail.data[0]?.cityId,
-    districtCode: locationDetail.data[0]?.districtId,
-    wardCode: locationDetail.data[0]?.wardId,
-    method: "cod",
+  const initialValues = () => {
+    for (let i = 0; i < userInfo.data.locations?.length; i++) {
+      if (userInfo.data.locations[i]?.default === 1) {
+        return {
+          fullName: userInfo.data.locations[i]?.fullName || "",
+          phoneNumber: userInfo.data.locations[i]?.phoneNumber || "",
+          address: userInfo.data.locations[i]?.address,
+          cityCode: userInfo.data.locations[i]?.cityId,
+          districtCode: userInfo.data.locations[i]?.districtId,
+          wardCode: userInfo.data.locations[i]?.wardId,
+          method: "cod",
+        };
+      }
+    }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(getCityListAction());
-    dispatch(getDetailLocationAction());
-    dispatch(
-      getDistrictListAction({ cityCode: locationDetail.data[0]?.cityId })
-    );
-    dispatch(
-      getWardListAction({ districtCode: locationDetail.data[0]?.districtId })
-    );
-  }, [locationDetail.data[0]?.id]);
+    for (let i = 0; i < userInfo.data.locations?.length; i++) {
+      if (userInfo.data.locations[i]?.default === 1) {
+        dispatch(
+          getDistrictListAction({
+            cityCode: userInfo.data.locations[i]?.cityId,
+          })
+        );
+        dispatch(
+          getWardListAction({
+            districtCode: userInfo.data.locations[i]?.districtId,
+          })
+        );
+      }
+    }
+  }, [userInfo.data.locations]);
 
   useEffect(() => {
     if (userInfo.data.id) {
@@ -610,7 +621,7 @@ const PaymentPage = () => {
           form={paymentForm}
           name="paymentForm"
           onFinish={(values) => handleSubmitPaymentForm(values)}
-          initialValues={initialValues}
+          initialValues={initialValues()}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 10 }}
         >

@@ -4,6 +4,7 @@
 .delivery-address-list .delivery-address-item {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 8px;
 }
 
 .delivery-address-list .delivery-address-item .delivery-address-detail {
