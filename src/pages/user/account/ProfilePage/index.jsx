@@ -20,7 +20,6 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const [profileForm] = Form.useForm();
   const { userInfo } = useSelector((state) => state.userReducer);
-  console.log("🚀 ~ file: index.jsx ~ line 11 ~ Page ~ userInfo", userInfo);
 
   const initialValues = {
     email: userInfo.data.email || undefined,
