@@ -130,7 +130,7 @@ const AddressPage = () => {
         default: 0,
         callback: {
           resetModalCreateLocation: createLocationForm.resetFields(),
-          cancelModalCreateLocation: setIsModalOpen(false),
+          cancelModalCreateLocation: () => setIsModalOpen(false),
         },
       })
     );
@@ -140,7 +140,7 @@ const AddressPage = () => {
     dispatch(getCityListAction());
   }, []);
 
-  const handleChooseDefaultLocation = async (locationId) => {
+  const handleChooseDefaultLocation = (locationId) => {
     dispatch(
       setDefaultLocationAction({ locationId, userId: userInfo.data.id })
     );

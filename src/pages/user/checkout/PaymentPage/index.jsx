@@ -79,8 +79,6 @@ const PaymentPage = () => {
   const { cartList } = useSelector((state) => state.cartReducer);
   const { userInfo } = useSelector((state) => state.userReducer);
   const { orderData } = useSelector((state) => state.orderReducer);
-  const { locationDetail } = useSelector((state) => state.locationReducer);
-  // console.log("🚀 ~ file: index.jsx:82 ~ PaymentPage ~ locationDetail:", locationDetail)
 
   const { cityList, districtList, wardList } = useSelector(
     (state) => state.locationReducer
@@ -96,9 +94,12 @@ const PaymentPage = () => {
     : SHIP_FEE; // Giảm giá vận chuyển
   let totalPrice = 0; // tổng giá
 
+  let locationDefaultId = null;
+
   const initialValues = () => {
     for (let i = 0; i < userInfo.data.locations?.length; i++) {
       if (userInfo.data.locations[i]?.default === 1) {
+        locationDefaultId = userInfo.data.locations[i]?.id;
         return {
           fullName: userInfo.data.locations[i]?.fullName || "",
           phoneNumber: userInfo.data.locations[i]?.phoneNumber || "",
@@ -637,7 +638,12 @@ const PaymentPage = () => {
               }}
             >
               <div className="change-delivery-address">
-                <ModalChangeDeliveryAddress locationDetail={locationDetail} />
+                <ModalChangeDeliveryAddress
+                  locationList={userInfo.data?.locations}
+                  locationDefaultId={locationDefaultId}
+                  paymentForm={paymentForm}
+                  userInfo={userInfo}
+                />
               </div>
               <Form.Item
                 label="Họ tên"

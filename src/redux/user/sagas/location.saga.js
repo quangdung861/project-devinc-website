@@ -98,8 +98,23 @@ function* getWardListSaga(action) {
 
 function* createLocationSaga(action) {
   try {
-    const { callback, ...values } = action.payload;
-    const result = yield axios.post(`http://localhost:4000/locations`, values);
+    const { callback, defaultAddress, locationList, ...values } =
+      action.payload;
+
+    if (defaultAddress === 1) {
+      for (let i = 0; i < locationList.length; i++)
+        yield axios.patch(
+          `http://localhost:4000/locations/${locationList[i].id}`,
+          {
+            default: 0,
+          }
+        );
+    }
+
+    const result = yield axios.post(`http://localhost:4000/locations`, {
+      ...values,
+      default: defaultAddress,
+    });
     yield put({
       type: SUCCESS(LOCATION_ACTION.CREATE_LOCATION_ITEM),
       payload: {
@@ -114,7 +129,7 @@ function* createLocationSaga(action) {
     });
     yield message.success("Thêm địa chỉ mới thành công");
     yield callback.resetModalCreateLocation;
-    yield callback.cancelModalCreateLocation;
+    yield callback.cancelModalCreateLocation();
   } catch (error) {
     yield put({
       type: FAIL(LOCATION_ACTION.CREATE_LOCATION_ITEM),
@@ -134,9 +149,7 @@ function* deleteLocationSaga(action) {
       "🚀 ~ file: location.saga.js:133 ~ function*deleteLocationSaga ~ locationId:",
       locationId
     );
-    yield axios.delete(
-      `http://localhost:4000/locations/${locationId}`
-    );
+    yield axios.delete(`http://localhost:4000/locations/${locationId}`);
     yield put({
       type: SUCCESS(LOCATION_ACTION.DELETE_LOCATION_ITEM),
     });
