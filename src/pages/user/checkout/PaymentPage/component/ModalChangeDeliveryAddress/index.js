@@ -207,10 +207,7 @@ const ModalChangeDeliveryAddress = ({
   const [isDefault, setIsDefault] = useState(false);
 
   const handleAddDeliveryAddress = (values) => {
-    console.log(
-      "🚀 ~ file: index.js:205 ~ handleAddDeliveryAddress ~ values:",
-      values
-    );
+
     const cityName = cityList?.data?.find(
       (item) => values.cityCode === item.code
     ).name;
