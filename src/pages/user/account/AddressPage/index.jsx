@@ -127,7 +127,7 @@ const AddressPage = () => {
         districtName: districtData.name,
         wardName: wardData.name,
         userId: userInfo.data.id,
-        default: 0,
+        defaultAddress: 0,
         callback: {
           resetModalCreateLocation: createLocationForm.resetFields(),
           cancelModalCreateLocation: () => setIsModalOpen(false),

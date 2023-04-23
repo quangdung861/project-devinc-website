@@ -51,7 +51,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    dispatch(getUserInfoAction({ id: userInfo.data.id }));
+    if (userInfo.data.id) {
+      dispatch(getUserInfoAction({ id: userInfo.data.id }));
+    }
   }, [userInfo.data.id]);
 
   return (

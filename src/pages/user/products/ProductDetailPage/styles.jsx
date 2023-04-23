@@ -68,7 +68,8 @@ export const MainContent = styled.div`
   }
 
   & .product-info-options .option-title {
-    width: 150px;
+    min-width: 150px;
+
   }
 
   & .btn-edit-review {
