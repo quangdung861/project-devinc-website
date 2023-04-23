@@ -66,6 +66,8 @@ import percent from "../../../../assets/images/icons-promotion-outline.png";
 
 import * as S from "./styles";
 const PaymentPage = () => {
+  const { userInfo } = useSelector((state) => state.userReducer);
+
   const { Option } = Select;
   const antIcon = <LoadingOutlined style={{ fontSize: 80 }} spin />;
   const navigate = useNavigate();
@@ -77,7 +79,6 @@ const PaymentPage = () => {
 
   const dispatch = useDispatch();
   const { cartList } = useSelector((state) => state.cartReducer);
-  const { userInfo } = useSelector((state) => state.userReducer);
   const { orderData } = useSelector((state) => state.orderReducer);
 
   const { cityList, districtList, wardList } = useSelector(
