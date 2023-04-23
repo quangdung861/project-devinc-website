@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom"
 
 export const Wrapper = styled.div`
-  padding: 30px 0px 12px;
+  padding: 30px 20px 12px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
