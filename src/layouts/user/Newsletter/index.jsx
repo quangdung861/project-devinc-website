@@ -62,9 +62,10 @@ const Newsletter = () => {
               >
                 <Input
                   style={{
-                    width: "380px",
+                    maxWidth: "380px",
                     height: "45px",
                     textAlign: "center",
+                    padding: "0px 20px"
                   }}
                   placeholder="Nhập địa chỉ email"
                 />

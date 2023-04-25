@@ -190,8 +190,9 @@ function* updateLocationSaga(action) {
       },
     });
     yield message.success("Cập nhật địa chỉ thành công");
-    yield callback.resetModalUpdateLocation;
-    yield callback.cancelModalUpdateLocation;
+    if(callback?.resetModalUpdateLocation) yield callback.resetModalUpdateLocation;
+    if(callback?.cancelModalUpdateLocation) yield callback.cancelModalUpdateLocation;
+    if(callback?.closeModalUpdateAddress) yield callback.closeModalUpdateAddress;
   } catch (error) {
     yield put({
       type: FAIL(LOCATION_ACTION.UPDATE_LOCATION_ITEM),
