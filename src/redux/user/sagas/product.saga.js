@@ -7,7 +7,7 @@ import { REQUEST, SUCCESS, FAIL, PRODUCT_ACTION } from "../constants";
 function* getProductListSaga(action) {
   try {
     const { params, showMore } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/products`, {
+    const result = yield axios.get(`http://localhost:4000/products`, {
       params: {
         _expand: "category",
         _page: params.page,
@@ -56,7 +56,7 @@ function* getProductListSaga(action) {
 function* getProductDetailSaga(action) {
   try {
     const { id } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/products/${id}`, {
+    const result = yield axios.get(`http://localhost:4000/products/${id}`, {
       params: {
         _expand: "category",
         _embed: ["options", "images", "favorites"],

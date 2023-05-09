@@ -13,9 +13,9 @@ import { message } from "antd";
 function* orderProductSaga(action) {
   try {
     const { products, images, callback, ...orderData } = action.payload;
-    const result = yield axios.post("https://json-server-vercel-tau-murex.vercel.app/orders", orderData);
+    const result = yield axios.post("http://localhost:4000/orders", orderData);
     for (let i = 0; i < products.length; i++) {
-      yield axios.post("https://json-server-vercel-tau-murex.vercel.app/orderProducts", {
+      yield axios.post("http://localhost:4000/orderProducts", {
         orderId: result.data.id,
         ...products[i],
       });
@@ -28,7 +28,7 @@ function* orderProductSaga(action) {
     });
     ///
     for (let i = 0; i < images.length; i++) {
-      yield axios.post("https://json-server-vercel-tau-murex.vercel.app/orderProductImages", {
+      yield axios.post("http://localhost:4000/orderProductImages", {
         orderId: result.data.id,
         productId: images[i][0].productId,
         name: images[i][0].name,
@@ -38,7 +38,7 @@ function* orderProductSaga(action) {
     }
     //
 
-    yield axios.post("https://json-server-vercel-tau-murex.vercel.app/statusDetailOrders", {
+    yield axios.post("http://localhost:4000/statusDetailOrders", {
       orderId: result.data.id,
       confirm: "Xác Nhận Thông Tin Thanh Toán",
       delivery: "Giao Cho ĐVVC",
@@ -65,11 +65,11 @@ function* guestOrderProductSaga(action) {
   try {
     const { products, callback, ...orderData } = action.payload;
     const result = yield axios.post(
-      "https://json-server-vercel-tau-murex.vercel.app/guestOrders",
+      "http://localhost:4000/guestOrders",
       orderData
     );
     for (let i = 0; i < products.length; i++) {
-      yield axios.post("https://json-server-vercel-tau-murex.vercel.app/guestOrderProducts", {
+      yield axios.post("http://localhost:4000/guestOrderProducts", {
         guestOrderId: result.data.id,
         ...products[i],
       });
@@ -97,7 +97,7 @@ function* guestOrderProductSaga(action) {
 function* getOrderListSaga(action) {
   try {
     const { userId } = action.payload;
-    const result = yield axios.get("https://json-server-vercel-tau-murex.vercel.app/orders", {
+    const result = yield axios.get("http://localhost:4000/orders", {
       params: {
         ...(userId && {
           userId: userId,
@@ -126,7 +126,7 @@ function* getOrderListSaga(action) {
 function* getOrderDetailSaga(action) {
   try {
     const { orderId } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/orders/${orderId}`, {
+    const result = yield axios.get(`http://localhost:4000/orders/${orderId}`, {
       params: {
         _embed: ["orderProducts", "orderProductImages", "statusDetailOrders"],
       },
@@ -150,7 +150,7 @@ function* getOrderDetailSaga(action) {
 function* getProductSoldSaga(action) {
   try {
     const { productId } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/orderProducts`, {
+    const result = yield axios.get(`http://localhost:4000/orderProducts`, {
       params: {
         productId,
       },
@@ -176,7 +176,7 @@ function* handleOrderItemSaga(action) {
   try {
     const { id, params, messageOrder, paramsStatusDetailOrders, callback } =
       action.payload;
-    const result = yield axios.patch(`https://json-server-vercel-tau-murex.vercel.app/orders/${id}`, {
+    const result = yield axios.patch(`http://localhost:4000/orders/${id}`, {
       ...(params.orderStatus && {
         orderStatus: params.orderStatus,
       }),
@@ -192,7 +192,7 @@ function* handleOrderItemSaga(action) {
     });
 
     yield axios.patch(
-      `https://json-server-vercel-tau-murex.vercel.app/statusDetailOrders/${paramsStatusDetailOrders.id}`,
+      `http://localhost:4000/statusDetailOrders/${paramsStatusDetailOrders.id}`,
       {
         ...(paramsStatusDetailOrders.confirm && {
           confirm: paramsStatusDetailOrders.confirm,
