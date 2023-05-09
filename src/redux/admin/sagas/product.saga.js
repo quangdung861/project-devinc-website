@@ -9,7 +9,7 @@ import { ADMIN_TABLE_LIMIT } from "../../../constants/pagination";
 function* getProductListAdminSaga(action) {
   try {
     const { params } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/products`, {
+    const result = yield axios.get(`http://localhost:4000/products`, {
       params: {
         _expand: "category",
         _page: params.page,
@@ -42,7 +42,7 @@ function* getProductListAdminSaga(action) {
 function* getProductDetailSaga(action) {
   try {
     const { id } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/products/${id}`, {
+    const result = yield axios.get(`http://localhost:4000/products/${id}`, {
       params: {
         _expand: "category",
         _embed: ["options", "images"],
@@ -68,10 +68,10 @@ function* createProductAdminSaga(action) {
   try {
     const { values, options, images, callback } = action.payload;
     console.log("🚀 ~ file: product.saga.js ~ line 71 ~ function*createProductAdminSaga ~ values", values)
-    const result = yield axios.post(`https://json-server-vercel-tau-murex.vercel.app/products`, values);
+    const result = yield axios.post(`http://localhost:4000/products`, values);
     if (options) {
       for (let i = 0; i < options.length; i++) {
-        yield axios.post(`https://json-server-vercel-tau-murex.vercel.app/options`, {
+        yield axios.post(`http://localhost:4000/options`, {
           productId: result.data.id,
           name: options[i].name,
           bonusPrice: options[i].bonusPrice,
@@ -81,7 +81,7 @@ function* createProductAdminSaga(action) {
 
     if (images) {
       for (let i = 0; i < images.length; i++) {
-        yield axios.post(`https://json-server-vercel-tau-murex.vercel.app/images`, {
+        yield axios.post(`http://localhost:4000/images`, {
           productId: result.data.id,
           url: images[i].url,
           name: images[i].name,
@@ -112,7 +112,7 @@ function* createProductAdminSaga(action) {
 function* deleteProductAdminSaga(action) {
   try {
     const id = action.payload;
-    yield axios.delete(`https://json-server-vercel-tau-murex.vercel.app/products/${id}`);
+    yield axios.delete(`http://localhost:4000/products/${id}`);
     yield put({ type: SUCCESS(PRODUCT_ADMIN_ACTION.DELETE_PRODUCT) });
     yield put({
       type: REQUEST(PRODUCT_ADMIN_ACTION.GET_PRODUCT_LIST),
@@ -147,19 +147,19 @@ function* updateProductAdminSaga(action) {
     } = action.payload;
     console.log("🚀 ~ file: product.saga.js ~ line 146 ~ function*updateProductAdminSaga ~ action.payload", action.payload)
     const result = yield axios.patch(
-      `https://json-server-vercel-tau-murex.vercel.app/products/${id}`,
+      `http://localhost:4000/products/${id}`,
       values
     );
     // Option
     for (let i = 0; i < options.length; i++) {
       if (options[i].id) {
-        yield axios.patch(`https://json-server-vercel-tau-murex.vercel.app/options/${options[i].id}`, {
+        yield axios.patch(`http://localhost:4000/options/${options[i].id}`, {
           productId: result.data.id,
           name: options[i].name,
           bonusPrice: options[i].bonusPrice,
         });
       } else {
-        yield axios.post(`https://json-server-vercel-tau-murex.vercel.app/options`, {
+        yield axios.post(`http://localhost:4000/options`, {
           productId: result.data.id,
           name: options[i].name,
           bonusPrice: options[i].bonusPrice,
@@ -173,7 +173,7 @@ function* updateProductAdminSaga(action) {
       );
       if (!keepOption) {
         yield axios.delete(
-          `https://json-server-vercel-tau-murex.vercel.app/options/${initialOptionIds[j]}`
+          `http://localhost:4000/options/${initialOptionIds[j]}`
         );
       }
     }
@@ -181,7 +181,7 @@ function* updateProductAdminSaga(action) {
     // Image
     for (let i = 0; i < images.length; i++) {
       if (!images[i].id) {
-        yield axios.post(`https://json-server-vercel-tau-murex.vercel.app/images`, {
+        yield axios.post(`http://localhost:4000/images`, {
           ...images[i],
           productId: result.data.id,
         });
@@ -195,7 +195,7 @@ function* updateProductAdminSaga(action) {
 
       if (!keepImage) {
         yield axios.delete(
-          `https://json-server-vercel-tau-murex.vercel.app/images/${initialImageIds[i]}`
+          `http://localhost:4000/images/${initialImageIds[i]}`
         );
       }
     }

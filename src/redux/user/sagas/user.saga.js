@@ -7,7 +7,7 @@ import { REQUEST, SUCCESS, FAIL, USER_ACTION } from "../constants";
 function* registerSaga(action) {
   try {
     const { data, callback } = action.payload;
-    yield axios.post("https://json-server-vercel-tau-murex.vercel.app/register", data);
+    yield axios.post("http://localhost:4000/register", data);
     yield put({ type: SUCCESS(USER_ACTION.REGISTER) });
     message.success("Đăng ký thành công");
     if (callback.redirectLogin) yield callback.redirectLogin();
@@ -39,7 +39,7 @@ function* registerSaga(action) {
 function* loginSaga(action) {
   try {
     const { data, callback } = action.payload;
-    const result = yield axios.post("https://json-server-vercel-tau-murex.vercel.app/login", data);
+    const result = yield axios.post("http://localhost:4000/login", data);
     localStorage.setItem("accessToken", result.data.accessToken);
     yield put({
       type: SUCCESS(USER_ACTION.LOGIN),
@@ -66,7 +66,7 @@ function* loginSaga(action) {
 function* getUserInfoSaga(action) {
   try {
     const { id } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/users/${id}`, {
+    const result = yield axios.get(`http://localhost:4000/users/${id}`, {
       params: {
         _embed: "locations",
       },
@@ -90,7 +90,7 @@ function* getUserInfoSaga(action) {
 function* updateUserInfoSaga(action) {
   try {
     const { userId, ...values } = action.payload;
-    yield axios.patch(`https://json-server-vercel-tau-murex.vercel.app/users/${userId}`, values);
+    yield axios.patch(`http://localhost:4000/users/${userId}`, values);
     yield put({
       type: REQUEST(USER_ACTION.GET_USER_INFO),
       payload: {

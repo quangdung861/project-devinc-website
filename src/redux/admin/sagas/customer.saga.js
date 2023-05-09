@@ -9,7 +9,7 @@ import { ADMIN_TABLE_LIMIT } from "../../../constants/pagination";
 function* getCustomerListSaga(action) {
   try {
     const { params } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/users`, {
+    const result = yield axios.get(`http://localhost:4000/users`, {
       params: {
         _page: params.page,
         _limit: params.limit,
@@ -41,7 +41,7 @@ function* getCustomerListSaga(action) {
 function* deleteCustomerAdminSaga(action) {
   try {
     const id = action.payload;
-    yield axios.delete(`https://json-server-vercel-tau-murex.vercel.app/users/${id}`);
+    yield axios.delete(`http://localhost:4000/users/${id}`);
     yield put({ type: SUCCESS(CUSTOMER_ACTION.DELETE_CUSTOMER_ITEM) });
     yield put({
       type: REQUEST(CUSTOMER_ACTION.GET_CUSTOMER_LIST),

@@ -3,7 +3,7 @@ const auth = require('json-server-auth');
 const moment = require('moment');
 
 const server = jsonServer.create();
-const router = jsonServer.router('https://json-server-vercel-tau-murex.vercel.app');
+const router = jsonServer.router('./database/db.json');
 
 const middlewares = jsonServer.defaults();
 

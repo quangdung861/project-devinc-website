@@ -6,7 +6,7 @@ import { REQUEST, SUCCESS, FAIL, REVIEW_ACTION } from "../constants";
 function* getReviewListSaga(action) {
   try {
     const { productId } = action.payload;
-    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/reviews`, {
+    const result = yield axios.get(`http://localhost:4000/reviews`, {
       params: {
         productId,
         _expand: "user",
@@ -34,7 +34,7 @@ function* postReviewSaga(action) {
   try {
     const { productId, callback } = action.payload;
     const result = yield axios.post(
-      `https://json-server-vercel-tau-murex.vercel.app/reviews`,
+      `http://localhost:4000/reviews`,
       action.payload
     );
     yield put({
@@ -62,7 +62,7 @@ function* patchReviewSaga(action) {
   try {
     const { id, productId, callback, ...values } = action.payload;
     const result = yield axios.patch(
-      `https://json-server-vercel-tau-murex.vercel.app/reviews/${id}`,
+      `http://localhost:4000/reviews/${id}`,
       values
     );
     yield put({
