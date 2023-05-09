@@ -14,7 +14,7 @@ function* favoriteProductSaga(action) {
   try {
     // const { productId } = action.payload;
     const result = yield axios.post(
-      `http://localhost:4000/favorites`,
+      `https://json-server-vercel-tau-murex.vercel.app/favorites`,
       action.payload
     );
     yield put({
@@ -40,7 +40,7 @@ function* favoriteProductSaga(action) {
 function* unFavoriteProductSaga(action) {
   try {
     const { id, productId } = action.payload;
-    yield axios.delete(`http://localhost:4000/favorites/${id}`);
+    yield axios.delete(`https://json-server-vercel-tau-murex.vercel.app/favorites/${id}`);
     yield put({
       type: SUCCESS(FAVORITE_ACTION.UN_FAVORITE_PRODUCT),
       payload: {
@@ -63,7 +63,7 @@ function* unFavoriteProductSaga(action) {
 
 function* getfavoriteListSaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/favorites`);
+    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/favorites`);
     yield put({
       type: SUCCESS(FAVORITE_ACTION.GET_FAVORITE_LIST),
       payload: {
