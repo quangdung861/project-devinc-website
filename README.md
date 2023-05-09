@@ -13,7 +13,10 @@ $ git clone https://git_url_clone <project_dir>
 $ cd <project_dir>
 $ yarn install
 $ yarn start
-$ yarn run server
+```
+Run server - run in another command window.
+```
+$ yarn run server 
 ```
 
 Login information - Json Server Auth.
