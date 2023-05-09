@@ -11,7 +11,7 @@ function* addNewsletterSaga(action) {
       "🚀 ~ file: newsletter.saga.js ~ line 9 ~ function*addNewsletterSaga ~ email",
       email
     );
-    const result = yield axios.post(`http://localhost:4000/newletters`, {
+    const result = yield axios.post(`https://json-server-vercel-tau-murex.vercel.app/newletters`, {
       email,
     });
     yield put({
@@ -37,7 +37,7 @@ function* addNewsletterSaga(action) {
 
 function* getNewsletterListSaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/newletters`);
+    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/newletters`);
     yield put({
       type: SUCCESS(NEWSLETTER_ACTION.GET_NEWSLETTER_LIST),
       payload: {

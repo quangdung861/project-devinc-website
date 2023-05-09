@@ -5,7 +5,7 @@ import { REQUEST, SUCCESS, FAIL, VOUCHER_ACTION } from "../constants";
 
 function* getVoucherListSaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/vouchers`);
+    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/vouchers`);
     yield put({
       type: SUCCESS(VOUCHER_ACTION.GET_VOUCHER_LIST),
       payload: {
@@ -24,7 +24,7 @@ function* getVoucherListSaga(action) {
 
 function* getVoucherShipListSaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/shipvouchers`);
+    const result = yield axios.get(`https://json-server-vercel-tau-murex.vercel.app/shipvouchers`);
     yield put({
       type: SUCCESS(VOUCHER_ACTION.GET_VOUCHER_SHIP_LIST),
       payload: {
