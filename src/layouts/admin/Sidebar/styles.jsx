@@ -7,12 +7,15 @@ export const SidebarContainer = styled.div`
   max-width: ${(props) => (props.isShowSidebar ? "230px" : "61px")};
   background-color: #182537;
   transition: all 0.5s ease;
+  user-select: none;
   & .header-sidebar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 14px;
     height: 60px;
+    white-space: nowrap;
+    overflow: hidden;
     & span {
       font-size: 24px;
       font-weight: 500;
@@ -35,6 +38,8 @@ export const SidebarItem = styled(Link)`
   border-radius: 4px;
   color: white;
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
 
   &:hover {
     background-color: #243041;
