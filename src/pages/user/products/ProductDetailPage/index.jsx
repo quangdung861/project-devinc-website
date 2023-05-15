@@ -58,7 +58,7 @@ const ProductDetailPage = () => {
   const { reviewDetail } = useSelector((state) => state.reviewReducer);
   const { productList } = useSelector((state) => state.productReducer);
   const { orderProductSold } = useSelector((state) => state.orderReducer);
-  
+
   const { voucherList, voucherShipList } = useSelector(
     (state) => state.voucherReducer
   );
@@ -106,7 +106,7 @@ const ProductDetailPage = () => {
       }
 
       return (
-        <Col md={24} sm={8} xs={8} className="card-hover" key={item.id}>
+        <Col lg={24} md={8} sm={8} xs={12} className="card-hover" key={item.id}>
           <Row>
             <Col span={24}>
               <div key={item.id} className="card">
@@ -354,17 +354,30 @@ const ProductDetailPage = () => {
           style={{
             width: "70px",
             height: "34px",
-            textAlign: "center",
             marginRight: 10,
+            marginBottom: "8px",
+            userSelect: "none",
           }}
           key={item.id}
           value={item.id}
         >
-          {item.name}
+          <div
+            style={{
+              position: "absolute",
+              inset: "3px 0 0 0",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {item.name}
+          </div>
         </Radio>
       );
     });
   }, [productDetail.data]);
+
+  const [chooseImage, setChooseImage] = useState(0);
 
   const renderProductImages = useMemo(() => {
     if (!productDetail.data.images?.length) return null;
@@ -375,33 +388,30 @@ const ProductDetailPage = () => {
           src={item.url}
           alt={item.name}
           style={{
-            width: "100%",
-            height: "auto",
+            minWidth: "87px",
+            height: "87px",
             objectFit: "cover",
-            padding: 5,
             marginRight: 10,
-            border: "2px solid #ee4d2d",
+            border: chooseImage === index && "2px solid #ee4d2d",
+            padding: chooseImage === index && "5px",
           }}
+          onClick={() => setChooseImage(index)}
         ></img>
       );
     });
-  }, [productDetail.data]);
+  }, [productDetail.data, chooseImage]);
 
   const renderProductImageFirst = useMemo(() => {
     if (!productDetail.data.images?.length) return null;
     return (
       <img
-        src={productDetail.data.images[0].url}
-        alt={productDetail.data.images[0].name}
-        style={{
-          width: "100%",
-          height: "560px",
-          objectFit: "cover",
-          marginBottom: 16,
-        }}
+        className="first-image"
+        src={productDetail.data.images[chooseImage].url}
+        alt={productDetail.data.images[chooseImage].name}
+        style={{}}
       />
     );
-  }, [productDetail.data]);
+  }, [productDetail.data, chooseImage]);
 
   const renderReviewList = useMemo(() => {
     if (!reviewList.data.length) return null;
@@ -438,7 +448,7 @@ const ProductDetailPage = () => {
   return (
     <S.MainContainer>
       <S.MainContent>
-        <Breadcrumb style={{ marginBottom: 16 }}>
+        <Breadcrumb style={{ marginBottom: 16 }} className="breadcrumb">
           <Breadcrumb.Item>
             <Link to={ROUTES.USER.HOME}>Trang chủ</Link>
           </Breadcrumb.Item>
@@ -456,14 +466,14 @@ const ProductDetailPage = () => {
           <Breadcrumb.Item>{productDetail.data.name}</Breadcrumb.Item>
         </Breadcrumb>
         <Row className="container-top">
-          <Col sm={10} xs={24} className="card-left">
+          <Col md={10} sm={24} className="card-left">
             <div className="product-image">
               {renderProductImageFirst}
               <div
                 style={{
                   display: "flex",
-                  width: "87px",
-                  height: "87px",
+                  overflow: "hidden",
+                  overflowX: "auto",
                 }}
               >
                 {renderProductImages}
@@ -472,7 +482,6 @@ const ProductDetailPage = () => {
             <div className="card-media">
               <div className="share">
                 <Space>
-                  <div style={{ fontSize: "16px" }}>Chia sẻ</div>
                   <div style={{ width: "26px" }}>
                     <img
                       style={{ width: "100%", height: "auto" }}
@@ -517,7 +526,7 @@ const ProductDetailPage = () => {
             </div>
           </Col>
 
-          <Col sm={14} xs={24} className="card-right">
+          <Col md={14} sm={24} className="card-right">
             <div className="product-info">
               <h3>{productDetail.data.name}</h3>
 
@@ -604,7 +613,7 @@ const ProductDetailPage = () => {
                   </div>
                 </div>
               </div>
-              <Col sm={8} xs={24}>
+              <Col md={8} sm={24}>
                 <Button
                   style={{ width: "100%", height: 40, marginTop: 24 }}
                   className="button-submit"
@@ -619,14 +628,14 @@ const ProductDetailPage = () => {
         </Row>
 
         <Row gutter={12}>
-          <Col md={18} sm={24} xs={24}>
+          <Col lg={18} md={24} sm={24}>
             <div style={{ backgroundColor: "white", margin: "16px 0px" }}>
               <S.Wraper
                 dangerouslySetInnerHTML={{ __html: productDetail.data.content }}
               />
             </div>
           </Col>
-          <Col md={6} sm={24} sx={24} style={{ marginBottom: 16 }}>
+          <Col lg={6} md={24} sm={24} style={{ marginBottom: 16 }}>
             <Row className="cards" gutter={[12, 12]}>
               {renderProductList()}
             </Row>
@@ -634,7 +643,7 @@ const ProductDetailPage = () => {
         </Row>
 
         <Row>
-          <Col sm={18} xs={24}>
+          <Col lg={18} md={18} sm={24} xs={24}>
             <Card size="small" bordered={false} title={<h3>Đánh giá</h3>}>
               {userInfo.data.id &&
                 (existReview?.id ? (

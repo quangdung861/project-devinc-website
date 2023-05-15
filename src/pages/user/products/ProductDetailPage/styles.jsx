@@ -8,19 +8,29 @@ import styled from "styled-components";
 //   margin: 0px 100px;
 // `;
 
-export const MainContainer = styled.div`
-  padding: 50px 0px;
+export const MainContainer = styled.div``;
+export const MainContent = styled.div`
+  padding: 50px 16px;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-`;
-export const MainContent = styled.div`
   & .container-top {
     background-color: white;
+    .card-left {
+      .product-image {
+        .first-image {
+          width: 100%;
+          height: 500px;
+          object-fit: cover;
+          margin-bottom: 16px;
+        }
+      }
+    }
   }
 
   & .card-left {
     padding: 16px;
+    flex: 1;
 
     & .card-media {
       display: flex;
@@ -69,7 +79,6 @@ export const MainContent = styled.div`
 
   & .product-info-options .option-title {
     min-width: 150px;
-
   }
 
   & .btn-edit-review {
@@ -94,8 +103,6 @@ export const MainContent = styled.div`
     margin-top: 16px;
   }
 
-
-
   & .card-title {
     .name {
       word-break: break-all;
@@ -117,7 +124,7 @@ export const MainContent = styled.div`
     border: 1px solid #ee4d2d;
     border-radius: 0.125rem;
     position: absolute;
-    width: 100%; 
+    width: 100%;
     z-index: 1;
     cursor: pointer;
   }
@@ -167,6 +174,27 @@ export const MainContent = styled.div`
     align-items: flex-end;
   }
 
+  @media only screen and (max-width: 992px) {
+    padding: 80px 8px 16px 8px;
+    .breadcrumb {
+      display: none;
+    }
+    & .container-top {
+      .card-left {
+        .product-image {
+          .first-image {
+          }
+        }
+        .card-media {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 576px) {
+    padding: 80px 0px 16px 0px;
+  }
 `;
 
 export const Wraper = styled.div`

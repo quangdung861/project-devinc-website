@@ -10,6 +10,7 @@ import * as S from "./styles";
 
 function Sidebar(props) {
   const { pathname } = useLocation();
+  const newPathname = pathname.split("/").slice(0,3).join("/");
   const navigate = useNavigate();
   const { isShowSidebar, setIsShowSidebar } = props;
 
@@ -19,7 +20,7 @@ function Sidebar(props) {
         <S.SidebarItem
           key={index}
           to={item.path}
-          active={pathname === item.path ? "true" : "false"}
+          active={newPathname === item.path ? "true" : "false"}
         >
           <Space className="menu-content">
             {item.icon}
