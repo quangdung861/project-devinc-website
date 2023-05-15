@@ -10,7 +10,7 @@ import * as S from "./styles";
 
 function Sidebar(props) {
   const { pathname } = useLocation();
-  const newPathname = pathname.split("/").slice(0,3).join("/");
+  const newPathname = pathname.split("/").slice(0, 3).join("/");
   const navigate = useNavigate();
   const { isShowSidebar, setIsShowSidebar } = props;
 
@@ -24,7 +24,7 @@ function Sidebar(props) {
         >
           <Space className="menu-content">
             {item.icon}
-            {item.title}
+            {isShowSidebar && item.title}
           </Space>
         </S.SidebarItem>
       );
@@ -34,9 +34,16 @@ function Sidebar(props) {
   return (
     <S.SidebarContainer isShowSidebar={isShowSidebar}>
       <div className="header-sidebar">
-        <span onClick={() => navigate(ROUTES.ADMIN.ORDERS)}>DE VINC</span>
+        {isShowSidebar && (
+          <span onClick={() => navigate(ROUTES.ADMIN.ORDERS)}>DE VINC</span>
+        )}
         <MenuOutlined
-          style={{ fontSize: 24, color: "white", cursor: "pointer" }}
+          style={{
+            fontSize: 24,
+            color: "white",
+            cursor: "pointer",
+            paddingLeft: "4px",
+          }}
           onClick={() => setIsShowSidebar(!isShowSidebar)}
         />
       </div>
