@@ -89,7 +89,7 @@ function* getUserInfoSaga(action) {
 
 function* updateUserInfoSaga(action) {
   try {
-    const { userId, ...values } = action.payload;
+    const { userId, callback, ...values } = action.payload;
     yield axios.patch(`http://localhost:4000/users/${userId}`, values);
     yield put({
       type: REQUEST(USER_ACTION.GET_USER_INFO),
@@ -97,9 +97,15 @@ function* updateUserInfoSaga(action) {
         id: userId,
       },
     });
-    message.success("Đăng nhập thành công");
+    if (values.avatar?.url) {
+      yield callback.resetImagePreview();
+      message.success("Cập nhập ảnh đại diện thành công");
+    }
+    if (values.phoneNumber) {
+      message.success("Cập nhập thông tin thành công");
+    }
   } catch (error) {
-    yield console(error);
+    yield console.log(error);
   }
 }
 

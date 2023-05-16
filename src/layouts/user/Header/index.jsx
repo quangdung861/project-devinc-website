@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, generatePath } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Input, Dropdown, Space, Menu, Avatar, Badge } from "antd";
+import { Dropdown, Space, Avatar, Badge } from "antd";
 import {
   ShoppingCartOutlined,
   DownOutlined,
   UserOutlined,
-  MenuOutlined,
 } from "@ant-design/icons";
 
 import { ROUTES } from "../../../constants/routes";
@@ -29,6 +28,12 @@ const Header = () => {
     localStorage.removeItem("accessToken");
     dispatch(logoutAction());
   };
+
+  useEffect(() => {
+    if (!userInfo.data.id) {
+      navigate(ROUTES.USER.HOME);
+    }
+  }, [userInfo]);
 
   return (
     <>
