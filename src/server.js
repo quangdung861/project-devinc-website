@@ -1,10 +1,10 @@
 const jsonServer = require('json-server');
 const auth = require('json-server-auth');
 const moment = require('moment');
-
+const dotenv = require('dotenv');
 const server = jsonServer.create();
 const router = jsonServer.router('./database/db.json');
-
+dotenv.config()
 const middlewares = jsonServer.defaults();
 
 server.db = router.db;
@@ -31,4 +31,6 @@ server.use((req, res, next) => {
 
 server.use(auth);
 server.use(router);
-server.listen(4000);
+server.listen(process.env.SERVER_PORT,()=>{
+  console.log(`Server is running PORT=${process.env.SERVER_PORT}`)
+});
