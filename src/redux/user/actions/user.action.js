@@ -11,3 +11,4 @@ export const logoutAction = createAction(REQUEST(USER_ACTION.LOGOUT));
 export const updateUserInfoAction = createAction(
   REQUEST(USER_ACTION.UPDATE_USER_INFO)
 )
+

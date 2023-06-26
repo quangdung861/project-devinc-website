@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-export const NewsletterContainer = styled.div``;
+export const NewsletterContainer = styled.div`
+  padding: 0px 20px;
+`;
 
 export const NewsletterContent = styled.div`
   text-align: center;

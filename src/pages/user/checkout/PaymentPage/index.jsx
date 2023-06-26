@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 
 import { generatePath, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +45,8 @@ import {
 import { SHIP_FEE } from "../CartPage/constant/shipFee";
 import { BANKING_LIST } from "./constant/bankingList";
 
+import ModalChangeDeliveryAddress from "./component/ModalChangeDeliveryAddress";
+
 import voucher from "../../../../assets/images/voucher.png";
 import voucherDisable from "../../../../assets/images/voucherDisable.png";
 import voucherShip from "../../../../assets/images/voucherShip.png";
@@ -64,6 +66,8 @@ import percent from "../../../../assets/images/icons-promotion-outline.png";
 
 import * as S from "./styles";
 const PaymentPage = () => {
+  const { userInfo } = useSelector((state) => state.userReducer);
+
   const { Option } = Select;
   const antIcon = <LoadingOutlined style={{ fontSize: 80 }} spin />;
   const navigate = useNavigate();
@@ -75,15 +79,12 @@ const PaymentPage = () => {
 
   const dispatch = useDispatch();
   const { cartList } = useSelector((state) => state.cartReducer);
-  const { userInfo } = useSelector((state) => state.userReducer);
   const { orderData } = useSelector((state) => state.orderReducer);
-  console.log(
-    "🚀 ~ file: index.jsx ~ line 80 ~ PaymentPage ~ orderList",
-    orderData.loading
-  );
+
   const { cityList, districtList, wardList } = useSelector(
     (state) => state.locationReducer
   );
+
   const { voucherList, voucherSelected, voucherShipList, voucherShipSelected } =
     useSelector((state) => state.voucherReducer);
 
@@ -94,20 +95,42 @@ const PaymentPage = () => {
     : SHIP_FEE; // Giảm giá vận chuyển
   let totalPrice = 0; // tổng giá
 
-  const initialValues = {
-    fullName: userInfo.data.fullName || "",
-    email: userInfo.data.email || "",
-    phoneNumber: userInfo.data.phoneNumber || "",
-    address: "",
-    cityCode: undefined,
-    districtCode: undefined,
-    wardCode: undefined,
-    method: "cod",
+  let locationDefaultId = null;
+
+  const initialValues = () => {
+    for (let i = 0; i < userInfo.data.locations?.length; i++) {
+      if (userInfo.data.locations[i]?.default === 1) {
+        locationDefaultId = userInfo.data.locations[i]?.id;
+        return {
+          fullName: userInfo.data.locations[i]?.fullName || "",
+          phoneNumber: userInfo.data.locations[i]?.phoneNumber || "",
+          address: userInfo.data.locations[i]?.address,
+          cityCode: userInfo.data.locations[i]?.cityId,
+          districtCode: userInfo.data.locations[i]?.districtId,
+          wardCode: userInfo.data.locations[i]?.wardId,
+          method: "cod",
+        };
+      }
+    }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(getCityListAction());
-  }, []);
+    for (let i = 0; i < userInfo.data.locations?.length; i++) {
+      if (userInfo.data.locations[i]?.default === 1) {
+        dispatch(
+          getDistrictListAction({
+            cityCode: userInfo.data.locations[i]?.cityId,
+          })
+        );
+        dispatch(
+          getWardListAction({
+            districtCode: userInfo.data.locations[i]?.districtId,
+          })
+        );
+      }
+    }
+  }, [userInfo.data.locations]);
 
   useEffect(() => {
     if (userInfo.data.id) {
@@ -600,7 +623,7 @@ const PaymentPage = () => {
           form={paymentForm}
           name="paymentForm"
           onFinish={(values) => handleSubmitPaymentForm(values)}
-          initialValues={initialValues}
+          initialValues={initialValues()}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 10 }}
         >
@@ -615,6 +638,14 @@ const PaymentPage = () => {
                 fontWeight: 500,
               }}
             >
+              <div className="change-delivery-address">
+                <ModalChangeDeliveryAddress
+                  locationList={userInfo.data?.locations}
+                  locationDefaultId={locationDefaultId}
+                  paymentForm={paymentForm}
+                  userInfo={userInfo}
+                />
+              </div>
               <Form.Item
                 label="Họ tên"
                 name="fullName"

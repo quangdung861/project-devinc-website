@@ -1,0 +1,18 @@
+.scroll-to {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 32px;
+  height: 32px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.scroll-to:hover {
+  background-color: #ccc;
+}

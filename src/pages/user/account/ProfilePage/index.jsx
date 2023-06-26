@@ -1,18 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  Avatar,
-  Skeleton,
-} from "antd";
+import { Row, Col, Form, Input, Button, Avatar, Skeleton, Space } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar";
 
 import { updateUserInfoAction } from "../../../../redux/user/actions";
+
+import { convertImageToBase64 } from "../../../../utils/file";
 
 import * as S from "./styles";
 
@@ -20,7 +14,6 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const [profileForm] = Form.useForm();
   const { userInfo } = useSelector((state) => state.userReducer);
-  console.log("🚀 ~ file: index.jsx ~ line 11 ~ Page ~ userInfo", userInfo);
 
   const initialValues = {
     email: userInfo.data.email || undefined,
@@ -29,16 +22,48 @@ const ProfilePage = () => {
   };
 
   const handleSubmitProfileForm = (values) => {
-    console.log(
-      "🚀 ~ file: index.jsx ~ line 23 ~ handleSubmitProfileForm ~ values",
-      values
-    );
     dispatch(updateUserInfoAction({ userId: userInfo.data.id, ...values }));
   };
 
+  const [imgPreview, setImgPreview] = useState("");
+
   useEffect(() => {
     profileForm.resetFields();
-  }, [userInfo]);
+    const ipnFileElement = document.querySelector("#myFileInput");
+    ipnFileElement?.addEventListener("change", function (e) {
+      const file = e.target?.files[0];
+      const imgPreview = convertImageToBase64(file);
+      imgPreview.then((res) => {
+        setImgPreview({
+          userId: userInfo.data.id,
+          avatar: {
+            url: res,
+            name: file.name,
+            type: file.type,
+          },
+          callback: {
+            resetImagePreview: () => {
+              setImgPreview("");
+            },
+          },
+        });
+      });
+    });
+  }, [userInfo, imgPreview]);
+
+  async function uploadImage() {
+    if (imgPreview) {
+      dispatch(updateUserInfoAction(imgPreview));
+    }
+
+    // var reader = new FileReader();
+    // reader.onload = function(file) {
+    //   var base64String = file.target.result;
+    //   console.log(base64String);
+    //   // Thực hiện các hành động xử lý với chuỗi base64String tại đây
+    // };
+    // reader.readAsDataURL(file);
+  }
 
   return (
     <S.Wrapper>
@@ -163,18 +188,37 @@ const ProfilePage = () => {
                     >
                       <Avatar
                         size={200}
-                        src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg"
+                        src={
+                          imgPreview.avatar?.url || userInfo.data.avatar?.url || "https://dvdn247.net/wp-content/uploads/2020/07/avatar-mac-dinh-1.png"
+                        }
                       />
                     </Col>
                     <Col
                       span={24}
                       style={{ display: "flex", justifyContent: "center" }}
                     >
-                      <Button style={{ width: 110, height: 40 }}>
-                        Chọn Ảnh
-                      </Button>
+                      {imgPreview ? (
+                        <Space>
+                          <Button onClick={() => setImgPreview("")}>Hủy</Button>
+                          <Button type="danger" onClick={() => uploadImage()}>Lưu</Button>
+                        </Space>
+                      ) : (
+                        <>
+                          <label
+                            htmlFor="myFileInput"
+                            className="custom-file-label"
+                          >
+                            Thay đổi ảnh đại diện
+                          </label>
+                          <input
+                            type="file"
+                            id="myFileInput"
+                            className="custom-file-input"
+                          />
+                        </>
+                      )}
                     </Col>
-                    <Col
+                    {/* <Col
                       span={24}
                       style={{
                         display: "flex",
@@ -187,7 +231,7 @@ const ProfilePage = () => {
                         <div>Dụng lượng file tối đa 1 MB</div>
                         <div>Định dạng:.JPEG, .PNG</div>
                       </div>
-                    </Col>
+                    </Col> */}
                   </Row>
                 </Col>
               </Row>

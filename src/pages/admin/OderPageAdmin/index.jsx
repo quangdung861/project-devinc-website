@@ -47,10 +47,6 @@ const OrderPageAdmin = () => {
   const [isModalConfirmDeleteOpen, setIsModalConfirmDeleteOpen] =
     useState(false);
   const [orderId, setOrderId] = useState();
-  console.log(
-    "🚀 ~ file: index.jsx ~ line 37 ~ OrderPageAdmin ~ orderList",
-    orderList
-  );
 
   useEffect(() => {
     dispatch(getOrderListAction({}));

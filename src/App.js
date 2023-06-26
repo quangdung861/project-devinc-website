@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import "./App.css";
 import jwtDecode from "jwt-decode";
 import "moment/locale/vi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { ROUTES } from "./constants/routes";
 import { getUserInfoAction } from "./redux/user/actions";
@@ -36,6 +36,8 @@ function App() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
+  const { userInfo } = useSelector((state) => state.userReducer);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -47,6 +49,12 @@ function App() {
       dispatch(getUserInfoAction({ id: decodeUserData.sub }));
     }
   }, []);
+
+  useEffect(() => {
+    if (userInfo.data.id) {
+      dispatch(getUserInfoAction({ id: userInfo.data.id }));
+    }
+  }, [userInfo.data.id]);
 
   return (
     <div>
@@ -79,7 +87,10 @@ function App() {
           <Route path={ROUTES.USER.PROFILE} element={<ProfilePage />} />
           <Route path={ROUTES.USER.ADDRESS} element={<AddressPage />} />
           <Route path={ROUTES.USER.PURCHASE} element={<PurchasePage />} />
-          <Route path={ROUTES.USER.ORDER_DETAIL} element={<OrderDetailPage />} />
+          <Route
+            path={ROUTES.USER.ORDER_DETAIL}
+            element={<OrderDetailPage />}
+          />
         </Route>
 
         {/* ADMIN */}

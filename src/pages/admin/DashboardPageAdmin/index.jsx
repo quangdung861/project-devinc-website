@@ -2,7 +2,9 @@ import React from "react";
 
 import Header from "../../../layouts/admin/Header";
 
-import * as S from "./styles"
+import dashboardAdmin from "../../../assets/images/dashboardAdmin.png";
+
+import * as S from "./styles";
 const DashboardPageAdmin = () => {
   return (
     <S.MainContainer>
