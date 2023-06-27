@@ -1,5 +1,6 @@
 import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
+import { API_URL } from "../../../constants/routes";
 
 import { REQUEST, SUCCESS, FAIL, NEWSLETTER_ACTION } from "../constants";
 import { message } from "antd";
@@ -11,7 +12,7 @@ function* addNewsletterSaga(action) {
       "🚀 ~ file: newsletter.saga.js ~ line 9 ~ function*addNewsletterSaga ~ email",
       email
     );
-    const result = yield axios.post(`http://localhost:4000/newletters`, {
+    const result = yield axios.post(`${API_URL}/newletters`, {
       email,
     });
     yield put({
@@ -37,7 +38,7 @@ function* addNewsletterSaga(action) {
 
 function* getNewsletterListSaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/newletters`);
+    const result = yield axios.get(`${API_URL}/newletters`);
     yield put({
       type: SUCCESS(NEWSLETTER_ACTION.GET_NEWSLETTER_LIST),
       payload: {

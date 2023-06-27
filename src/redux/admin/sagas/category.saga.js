@@ -1,12 +1,12 @@
 import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
 import { message } from "antd";
-
+import { API_URL } from "../../../constants/routes";
 import { REQUEST, SUCCESS, FAIL, CATEGORY_ADMIN_ACTION } from "../constants";
 
 function* getCategorySaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/categories`);
+    const result = yield axios.get(`${API_URL}/categories`);
     yield put({
       type: SUCCESS(CATEGORY_ADMIN_ACTION.GET_CATEGORY_LIST),
       payload: {
@@ -26,7 +26,7 @@ function* getCategorySaga(action) {
 function* createCategorySaga(action) {
   try {
     const values = action.payload;
-    const result = yield axios.post(`http://localhost:4000/categories`, {
+    const result = yield axios.post(`${API_URL}/categories`, {
       name: values.category,
     });
     yield put({
@@ -52,7 +52,7 @@ function* createCategorySaga(action) {
 function* updateCategorySaga(action) {
   try {
     const { categoryId, categoryName, callback } = action.payload;
-    yield axios.patch(`http://localhost:4000/categories/${categoryId}`, {
+    yield axios.patch(`${API_URL}/categories/${categoryId}`, {
       name: categoryName,
     });
     yield put({
@@ -77,7 +77,7 @@ function* updateCategorySaga(action) {
 function* deleteCategorySaga(action) {
   try {
     const values = action.payload;
-    yield axios.delete(`http://localhost:4000/categories/${values}`);
+    yield axios.delete(`${API_URL}/categories/${values}`);
     yield put({
       type: REQUEST(CATEGORY_ADMIN_ACTION.GET_CATEGORY_LIST),
     });

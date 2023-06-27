@@ -1,6 +1,6 @@
 import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
-
+import { API_URL } from "../../../constants/routes";
 import { REQUEST, SUCCESS, FAIL, CUSTOMER_ACTION } from "../constants";
 import { message } from "antd";
 
@@ -9,7 +9,7 @@ import { ADMIN_TABLE_LIMIT } from "../../../constants/pagination";
 function* getCustomerListSaga(action) {
   try {
     const { params } = action.payload;
-    const result = yield axios.get(`http://localhost:4000/users`, {
+    const result = yield axios.get(`${API_URL}/users`, {
       params: {
         _page: params.page,
         _limit: params.limit,
@@ -41,7 +41,7 @@ function* getCustomerListSaga(action) {
 function* deleteCustomerAdminSaga(action) {
   try {
     const id = action.payload;
-    yield axios.delete(`http://localhost:4000/users/${id}`);
+    yield axios.delete(`${API_URL}/users/${id}`);
     yield put({ type: SUCCESS(CUSTOMER_ACTION.DELETE_CUSTOMER_ITEM) });
     yield put({
       type: REQUEST(CUSTOMER_ACTION.GET_CUSTOMER_LIST),

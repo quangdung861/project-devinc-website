@@ -9,10 +9,11 @@ import {
   USER_ACTION,
 } from "../constants";
 import { message } from "antd";
+import { API_URL } from "../../../constants/routes";
 
 function* getCityListSaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/cities`);
+    const result = yield axios.get(`${API_URL}/cities`);
     yield put({
       type: SUCCESS(LOCATION_ACTION.GET_CITY_LIST),
       payload: {
@@ -31,7 +32,7 @@ function* getCityListSaga(action) {
 
 // function* getLocationDetailSaga(action) {
 //   try {
-//     const result = yield axios.get(`http://localhost:4000/locations`);
+//     const result = yield axios.get(`${API_URL}/locations`);
 //     yield put({
 //       type: SUCCESS(LOCATION_ACTION.GET_DETAIL_LOCATION),
 //       payload: {
@@ -52,7 +53,7 @@ function* getDistrictListSaga(action) {
   try {
     const { cityCode } = action.payload;
     const result = yield axios.get(
-      `http://localhost:4000/districts?parentcode=${cityCode}`
+      `${API_URL}/districts?parentcode=${cityCode}`
     );
 
     yield put({
@@ -75,7 +76,7 @@ function* getWardListSaga(action) {
   try {
     const { districtCode } = action.payload;
     const result = yield axios.get(
-      `http://localhost:4000/wards?parentcode=${districtCode}`
+      `${API_URL}/wards?parentcode=${districtCode}`
     );
 
     yield put({
@@ -104,14 +105,14 @@ function* createLocationSaga(action) {
     if (defaultAddress === 1) {
       for (let i = 0; i < locationList.length; i++)
         yield axios.patch(
-          `http://localhost:4000/locations/${locationList[i].id}`,
+          `${API_URL}/locations/${locationList[i].id}`,
           {
             default: 0,
           }
         );
     }
 
-    const result = yield axios.post(`http://localhost:4000/locations`, {
+    const result = yield axios.post(`${API_URL}/locations`, {
       ...values,
       default: defaultAddress,
     });
@@ -149,7 +150,7 @@ function* deleteLocationSaga(action) {
       "🚀 ~ file: location.saga.js:133 ~ function*deleteLocationSaga ~ locationId:",
       locationId
     );
-    yield axios.delete(`http://localhost:4000/locations/${locationId}`);
+    yield axios.delete(`${API_URL}/locations/${locationId}`);
     yield put({
       type: SUCCESS(LOCATION_ACTION.DELETE_LOCATION_ITEM),
     });
@@ -174,7 +175,7 @@ function* updateLocationSaga(action) {
   try {
     const { callback, locationId, ...values } = action.payload;
     const result = yield axios.patch(
-      `http://localhost:4000/locations/${locationId}`,
+      `${API_URL}/locations/${locationId}`,
       values
     );
     yield put({
@@ -207,19 +208,19 @@ function* setDefaultLocationSaga(action) {
   try {
     const { locationId, userId } = action.payload;
     const result = yield axios.get(
-      `http://localhost:4000/locations?userId=${userId}`
+      `${API_URL}/locations?userId=${userId}`
     );
     for (let i = 0; i < result.data.length; i++) {
       if (result.data[i].id === locationId) {
         yield axios.patch(
-          `http://localhost:4000/locations/${result.data[i].id}`,
+          `${API_URL}/locations/${result.data[i].id}`,
           {
             default: 1,
           }
         );
       } else {
         yield axios.patch(
-          `http://localhost:4000/locations/${result.data[i].id}`,
+          `${API_URL}/locations/${result.data[i].id}`,
           {
             default: 0,
           }

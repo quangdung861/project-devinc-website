@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f7043294.css",
+    "main.js": "/static/js/main.794401b7.js",
+    "static/js/787.900d07e3.chunk.js": "/static/js/787.900d07e3.chunk.js",
+    "static/media/approvedDisable.png": "/static/media/approvedDisable.42a8551b7bf8276abbb4.png",
+    "static/media/voucherShipDisable.png": "/static/media/voucherShipDisable.900eebf23a04294d69b4.png",
+    "static/media/cardCredit.png": "/static/media/cardCredit.8050749cef4bf98ace5a.png",
+    "static/media/dashboardAdmin.png": "/static/media/dashboardAdmin.5d2537c18ec9d8cde8d7.png",
+    "static/media/voucherShip.png": "/static/media/voucherShip.de12a73b6f7e696b18ca.png",
+    "static/media/approved.jpg": "/static/media/approved.aa0253194a972c818e55.jpg",
+    "static/media/notification.png": "/static/media/notification.aa7290ee7cce3cb1d7c3.png",
+    "static/media/cardCreditDisable.jpg": "/static/media/cardCreditDisable.4a3b57bd728fbe777290.jpg",
+    "static/media/voucherDisable.png": "/static/media/voucherDisable.3ddcb0e3e042da99fd61.png",
+    "static/media/voucher.png": "/static/media/voucher.245db8dca88e9520c539.png",
+    "index.html": "/index.html",
+    "main.f7043294.css.map": "/static/css/main.f7043294.css.map",
+    "main.794401b7.js.map": "/static/js/main.794401b7.js.map",
+    "787.900d07e3.chunk.js.map": "/static/js/787.900d07e3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f7043294.css",
+    "static/js/main.794401b7.js"
+  ]
+}

@@ -9,12 +9,13 @@ import {
   PRODUCT_ACTION,
   FAVORITE_ACTION,
 } from "../constants";
+import { API_URL } from "../../../constants/routes";
 
 function* favoriteProductSaga(action) {
   try {
     // const { productId } = action.payload;
     const result = yield axios.post(
-      `http://localhost:4000/favorites`,
+      `${API_URL}/favorites`,
       action.payload
     );
     yield put({
@@ -40,7 +41,7 @@ function* favoriteProductSaga(action) {
 function* unFavoriteProductSaga(action) {
   try {
     const { id, productId } = action.payload;
-    yield axios.delete(`http://localhost:4000/favorites/${id}`);
+    yield axios.delete(`${API_URL}/favorites/${id}`);
     yield put({
       type: SUCCESS(FAVORITE_ACTION.UN_FAVORITE_PRODUCT),
       payload: {
@@ -63,7 +64,7 @@ function* unFavoriteProductSaga(action) {
 
 function* getfavoriteListSaga(action) {
   try {
-    const result = yield axios.get(`http://localhost:4000/favorites`);
+    const result = yield axios.get(`${API_URL}/favorites`);
     yield put({
       type: SUCCESS(FAVORITE_ACTION.GET_FAVORITE_LIST),
       payload: {

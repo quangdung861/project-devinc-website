@@ -1,13 +1,14 @@
 import { put, debounce, takeEvery } from "redux-saga/effects";
 import axios from "axios";
 import { message } from "antd";
+import { API_URL } from "../../../constants/routes";
 
 import { REQUEST, SUCCESS, FAIL, PRODUCT_ACTION } from "../constants";
 
 function* getProductListSaga(action) {
   try {
     const { params, showMore } = action.payload;
-    const result = yield axios.get(`http://localhost:4000/products`, {
+    const result = yield axios.get(`${API_URL}/products`, {
       params: {
         _expand: "category",
         _page: params.page,
@@ -56,7 +57,7 @@ function* getProductListSaga(action) {
 function* getProductDetailSaga(action) {
   try {
     const { id } = action.payload;
-    const result = yield axios.get(`http://localhost:4000/products/${id}`, {
+    const result = yield axios.get(`${API_URL}/products/${id}`, {
       params: {
         _expand: "category",
         _embed: ["options", "images", "favorites"],

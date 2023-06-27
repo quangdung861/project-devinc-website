@@ -1,13 +1,14 @@
 import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
 import { message } from "antd";
+import { API_URL } from "../../../constants/routes";
 
 import { REQUEST, SUCCESS, FAIL, USER_ACTION } from "../constants";
 
 function* registerSaga(action) {
   try {
     const { data, callback } = action.payload;
-    yield axios.post("http://localhost:4000/register", data);
+    yield axios.post(`${API_URL}/register`, data);
     yield put({ type: SUCCESS(USER_ACTION.REGISTER) });
     message.success("Đăng ký thành công");
     if (callback.redirectLogin) yield callback.redirectLogin();
@@ -39,7 +40,7 @@ function* registerSaga(action) {
 function* loginSaga(action) {
   try {
     const { data, callback } = action.payload;
-    const result = yield axios.post("http://localhost:4000/login", data);
+    const result = yield axios.post(`${API_URL}/login`, data);
     localStorage.setItem("accessToken", result.data.accessToken);
     yield put({
       type: SUCCESS(USER_ACTION.LOGIN),
@@ -66,7 +67,7 @@ function* loginSaga(action) {
 function* getUserInfoSaga(action) {
   try {
     const { id } = action.payload;
-    const result = yield axios.get(`http://localhost:4000/users/${id}`, {
+    const result = yield axios.get(`${API_URL}/users/${id}`, {
       params: {
         _embed: "locations",
       },
@@ -90,7 +91,7 @@ function* getUserInfoSaga(action) {
 function* updateUserInfoSaga(action) {
   try {
     const { userId, callback, ...values } = action.payload;
-    yield axios.patch(`http://localhost:4000/users/${userId}`, values);
+    yield axios.patch(`${API_URL}/users/${userId}`, values);
     yield put({
       type: REQUEST(USER_ACTION.GET_USER_INFO),
       payload: {

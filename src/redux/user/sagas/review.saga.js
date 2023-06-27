@@ -1,12 +1,13 @@
 import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
+import { API_URL } from "../../../constants/routes";
 
 import { REQUEST, SUCCESS, FAIL, REVIEW_ACTION } from "../constants";
 
 function* getReviewListSaga(action) {
   try {
     const { productId } = action.payload;
-    const result = yield axios.get(`http://localhost:4000/reviews`, {
+    const result = yield axios.get(`${API_URL}/reviews`, {
       params: {
         productId,
         _expand: "user",
@@ -34,7 +35,7 @@ function* postReviewSaga(action) {
   try {
     const { productId, callback } = action.payload;
     const result = yield axios.post(
-      `http://localhost:4000/reviews`,
+      `${API_URL}/reviews`,
       action.payload
     );
     yield put({
@@ -62,7 +63,7 @@ function* patchReviewSaga(action) {
   try {
     const { id, productId, callback, ...values } = action.payload;
     const result = yield axios.patch(
-      `http://localhost:4000/reviews/${id}`,
+      `${API_URL}/reviews/${id}`,
       values
     );
     yield put({

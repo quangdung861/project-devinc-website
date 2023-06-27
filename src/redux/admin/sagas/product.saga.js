@@ -1,6 +1,7 @@
 import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
 import { message } from "antd";
+import {API_URL} from "../../../constants/routes"
 
 import { REQUEST, SUCCESS, FAIL, PRODUCT_ADMIN_ACTION } from "../constants";
 
@@ -9,7 +10,7 @@ import { ADMIN_TABLE_LIMIT } from "../../../constants/pagination";
 function* getProductListAdminSaga(action) {
   try {
     const { params } = action.payload;
-    const result = yield axios.get(`http://localhost:4000/products`, {
+    const result = yield axios.get(`${API_URL}/products`, {
       params: {
         _expand: "category",
         _page: params.page,
@@ -42,7 +43,7 @@ function* getProductListAdminSaga(action) {
 function* getProductDetailSaga(action) {
   try {
     const { id } = action.payload;
-    const result = yield axios.get(`http://localhost:4000/products/${id}`, {
+    const result = yield axios.get(`${API_URL}/products/${id}`, {
       params: {
         _expand: "category",
         _embed: ["options", "images"],
@@ -68,10 +69,10 @@ function* createProductAdminSaga(action) {
   try {
     const { values, options, images, callback } = action.payload;
     console.log("🚀 ~ file: product.saga.js ~ line 71 ~ function*createProductAdminSaga ~ values", values)
-    const result = yield axios.post(`http://localhost:4000/products`, values);
+    const result = yield axios.post(`${API_URL}/products`, values);
     if (options) {
       for (let i = 0; i < options.length; i++) {
-        yield axios.post(`http://localhost:4000/options`, {
+        yield axios.post(`${API_URL}/options`, {
           productId: result.data.id,
           name: options[i].name,
           bonusPrice: options[i].bonusPrice,
@@ -81,7 +82,7 @@ function* createProductAdminSaga(action) {
 
     if (images) {
       for (let i = 0; i < images.length; i++) {
-        yield axios.post(`http://localhost:4000/images`, {
+        yield axios.post(`${API_URL}/images`, {
           productId: result.data.id,
           url: images[i].url,
           name: images[i].name,
@@ -112,7 +113,7 @@ function* createProductAdminSaga(action) {
 function* deleteProductAdminSaga(action) {
   try {
     const id = action.payload;
-    yield axios.delete(`http://localhost:4000/products/${id}`);
+    yield axios.delete(`${API_URL}/products/${id}`);
     yield put({ type: SUCCESS(PRODUCT_ADMIN_ACTION.DELETE_PRODUCT) });
     yield put({
       type: REQUEST(PRODUCT_ADMIN_ACTION.GET_PRODUCT_LIST),
@@ -147,19 +148,19 @@ function* updateProductAdminSaga(action) {
     } = action.payload;
     console.log("🚀 ~ file: product.saga.js ~ line 146 ~ function*updateProductAdminSaga ~ action.payload", action.payload)
     const result = yield axios.patch(
-      `http://localhost:4000/products/${id}`,
+      `${API_URL}/products/${id}`,
       values
     );
     // Option
     for (let i = 0; i < options.length; i++) {
       if (options[i].id) {
-        yield axios.patch(`http://localhost:4000/options/${options[i].id}`, {
+        yield axios.patch(`${API_URL}/options/${options[i].id}`, {
           productId: result.data.id,
           name: options[i].name,
           bonusPrice: options[i].bonusPrice,
         });
       } else {
-        yield axios.post(`http://localhost:4000/options`, {
+        yield axios.post(`${API_URL}/options`, {
           productId: result.data.id,
           name: options[i].name,
           bonusPrice: options[i].bonusPrice,
@@ -173,7 +174,7 @@ function* updateProductAdminSaga(action) {
       );
       if (!keepOption) {
         yield axios.delete(
-          `http://localhost:4000/options/${initialOptionIds[j]}`
+          `${API_URL}/options/${initialOptionIds[j]}`
         );
       }
     }
@@ -181,7 +182,7 @@ function* updateProductAdminSaga(action) {
     // Image
     for (let i = 0; i < images.length; i++) {
       if (!images[i].id) {
-        yield axios.post(`http://localhost:4000/images`, {
+        yield axios.post(`${API_URL}/images`, {
           ...images[i],
           productId: result.data.id,
         });
@@ -195,7 +196,7 @@ function* updateProductAdminSaga(action) {
 
       if (!keepImage) {
         yield axios.delete(
-          `http://localhost:4000/images/${initialImageIds[i]}`
+          `${API_URL}/images/${initialImageIds[i]}`
         );
       }
     }
